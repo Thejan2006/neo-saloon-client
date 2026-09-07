@@ -1,36 +1,94 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Neo Saloon Client
 
-## Getting Started
+> A modern web client foundation for the Neo Saloon experience.
 
-First, run the development server:
+![Next.js](https://img.shields.io/badge/Next.js-16.3.1-111827?style=for-the-badge&logo=next.js&logoColor=white)
+![React](https://img.shields.io/badge/React-19.2.8-149eca?style=for-the-badge&logo=react&logoColor=white)
+![Prisma](https://img.shields.io/badge/Prisma-7.9.1-2d3748?style=for-the-badge&logo=prisma&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?style=for-the-badge&logo=typescript&logoColor=white)
+
+Neo Saloon Client is a Next.js application built with the App Router, React, TypeScript, Tailwind CSS, and Prisma. It is currently the starting point for a polished client experience, with the data layer ready for user records and future product features.
+
+## What is inside?
+
+| Area | Details |
+| --- | --- |
+| Frontend | Next.js App Router with React 19 and TypeScript |
+| Styling | Tailwind CSS 4 and optimized Geist fonts |
+| Data layer | Prisma 7 with a SQLite datasource |
+| User model | Unique email, optional name, and automatic timestamps |
+| Database client | Prisma Client with the PostgreSQL adapter package available for future migrations |
+
+## Quick start
+
+### 1. Install dependencies
+
+```bash
+npm install
+```
+
+### 2. Configure the database
+
+Create a `.env` file in the project root:
+
+```env
+DATABASE_URL="file:./dev.db"
+```
+
+Then generate Prisma Client and apply the local schema:
+
+```bash
+npx prisma generate
+npx prisma db push
+```
+
+### 3. Start the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Available commands
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Start the development server |
+| `npm run build` | Create a production build |
+| `npm run start` | Serve the production build |
+| `npx prisma generate` | Generate the Prisma Client |
+| `npx prisma db push` | Sync the Prisma schema to the database |
+| `npx prisma studio` | Browse and edit local database records |
 
-## Learn More
+## Project structure
 
-To learn more about Next.js, take a look at the following resources:
+```text
+app/                 Next.js routes, layout, and global styles
+lib/prisma.ts        Shared Prisma Client setup
+prisma/schema.prisma Database schema and models
+public/              Static assets
+postman/             API collections, environments, and specs
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Current data model
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The initial `User` model includes:
 
-## Deploy on Vercel
+- A unique email address
+- An optional display name
+- Automatically managed `createdAt` and `updatedAt` timestamps
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Roadmap
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Shape the Neo Saloon client interface
+- Add authentication and user flows
+- Connect user-facing screens to Prisma data
+- Expand the domain model as the product takes form
+
+## Learn more
+
+- [Next.js documentation](https://nextjs.org/docs)
+- [React documentation](https://react.dev/)
+- [Prisma documentation](https://www.prisma.io/docs)
+- [Tailwind CSS documentation](https://tailwindcss.com/docs)
