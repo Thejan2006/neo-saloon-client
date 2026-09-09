@@ -1,16 +1,25 @@
 generator client {
-	provider = "prisma-client-js"
+    provider = "prisma-client"
+    output   = "../app/generated/prisma"
 }
 
 datasource db {
-	provider = "sqlite"
-	url      = env("DATABASE_URL")
+    provider = "sqlite"
 }
 
+// Define models here
 model User {
-	id        Int      @id @default(autoincrement())
-	email     String   @unique
-	name      String?
-	createdAt DateTime @default(now())
-	updatedAt DateTime @updatedAt
+    id        String  @id @default(uuid()) // Primary key with UUID generation for security 
+    email     String  @unique
+    phone     String? @unique
+    firstname String
+    lastname  String
+    password  String
+	role   String @default("CUSTOMER") // Default role set to CUSTOMER
+    status    String  @default("ACTIVE") // Default status set to ACTIVE Banned suspended
+    CreatedAt DateTime @default(now())
+    UpdatedAt DateTime @updatedAt
+    lastLogin DateTime? // Optional field for tracking last login time
+    privileges Json? @default("[]") // Optional field for storing user privileges
+
 }
