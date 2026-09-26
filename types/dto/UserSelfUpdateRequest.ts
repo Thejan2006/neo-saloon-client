@@ -9,8 +9,8 @@ const UserSelfUpdateRequestSchema = z.object(
         profileImage: z.string().url({ message: "Invalid profile image URL" }).optional(),
         password: z.never().optional(),
         role : z.never().optional(),
-        privileges: z.never().optional() // disallow privileges to be set during self-update
-        status: z.never().optional() // disallow status to be set during self-update
+        privileges: z.never().optional(), // disallow privileges to be set during self-update
+        status: z.never().optional(), // disallow status to be set during self-update
 
     }
 )
