@@ -20,5 +20,5 @@ model User {
     UpdatedAt DateTime @updatedAt
     lastLogin DateTime? // Optional field for tracking last login time
     privileges Json? @default("[]") // Optional field for storing user privileges
-
+    profileImage String @default("/images/default-profile.png")
 }
