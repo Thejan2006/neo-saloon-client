@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { UserRegistrationRequestSchema } from "@/types/dto/UserRegistrationRequest";
 import { UserSelfUpdateRequestSchema } from "@/types/dto/UserSelfUpdateRequest";
+import { UserUpdateByAdminRequestSchema } from "@/types/dto/UserUpdateByAdminRequest";
 export async function GET(request : NextRequest){
 
     const havePrivilege = await isPrivileged(request, "users:read")
