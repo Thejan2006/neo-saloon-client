@@ -11,7 +11,7 @@ const UserSelfUpdateRequestSchema = z.object(
         role : z.never().optional(),
         privileges: z.never().optional(), // disallow privileges to be set during self-update
         status: z.never().optional(), // disallow status to be set during self-update
-
+        id: z.never().optional() // disallow id to be set during self-update
     }
 )
 
