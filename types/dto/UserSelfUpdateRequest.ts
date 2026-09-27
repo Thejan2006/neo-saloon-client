@@ -16,5 +16,6 @@ const UserSelfUpdateRequestSchema = z.object(
 )
 
 
+
 export type UserSelfUpdateRequestType = z.infer<typeof UserSelfUpdateRequestSchema>; // make a type for user self-update request validation schema using zod
 export {UserSelfUpdateRequestSchema}
