@@ -43,7 +43,7 @@ model Product{
   compareAt Float?
   brand String?
   model String?
-  media Media[]
+  media Media[] // product have multiple media
 }
 
 enum MediaType { // Enum for media type
