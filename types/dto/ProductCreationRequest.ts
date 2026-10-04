@@ -20,6 +20,8 @@ const ProductCreationRequestSchema = z.object({
       url: z.string().url("Media URL must be a valid URL"),
       type: mediaTypeEnum,
     })
-  ).optional()
+  )
 
 });
+
+export default ProductCreationRequestSchema;
