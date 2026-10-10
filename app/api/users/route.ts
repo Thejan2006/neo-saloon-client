@@ -212,8 +212,8 @@ export async function PUT(request : NextRequest){
                 },
                 data : {
                     email : body.email || user.email,
-                    firstName : body.firstName || user.firstname,
-                    lastName : body.lastName || user.lastname,
+                    firstname : body.firstName || user.firstname,
+                    lastname : body.lastName || user.lastname,
                     phone : body.phone || user.phone,
                     profileImage : body.profileImage || user.profileImage // should be included in the token
                 }
@@ -309,4 +309,3 @@ export async function PUT(request : NextRequest){
         )
     }  
 }
-
