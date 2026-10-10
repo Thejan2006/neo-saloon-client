@@ -1,5 +1,6 @@
 generator client {
-    provider = "prisma-client-js"
+    provider = "prisma-client"
+    output   = "../app/generated/prisma"
 }
 
 datasource db {
@@ -46,15 +47,16 @@ model Product{
   media Media[] // product have multiple media
 }
 
-enum MediaType { // Enum for media type
+enum mediaTypeEnum { // Enum for media type
   IMAGE
   VIDEO
+  @@map("MediaType")
 }
 
 model Media{
   id String @id @default(uuid())
   url String 
-  type MediaType
+  type mediaTypeEnum
   productId String
   product Product @relation(fields : [productId], references: [id])
 }
