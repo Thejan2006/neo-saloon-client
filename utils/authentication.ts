@@ -4,16 +4,19 @@ import type { RequestUserType } from "@/types/requestUser";
 
 export async function getUser(request : NextRequest) : Promise<RequestUserType | null>{
 
-    const loginToken = request.cookies.get("login-token")?.value
-    
-    const secretText = process.env.JOSE_SECRET || "TemporySecret8929%"
+    const loginToken = request.cookies.get("login_token")?.value
+    const secretText = process.env.JOSE_SECRET_KEY
+
+    if (!loginToken || !secretText) {
+        return null
+    }
 
     const secret = new TextEncoder().encode(secretText)
 
     try{
 
         const tokenData = await jose.jwtVerify(
-            loginToken||"",
+            loginToken,
             secret
         )
 
@@ -36,9 +39,5 @@ export async function isPrivileged(request : NextRequest , privilege : string) :
         return false
     }
 
-    if(user.privileges.includes(privilege)){
-        return true
-    }else{
-        return false
-    }
+    return Array.isArray(user.privileges) && user.privileges.includes(privilege)
 }
