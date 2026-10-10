@@ -5,7 +5,7 @@ import prisma from "@/lib/prisma";
 import { isPrivileged } from "@/utils/authentication";
 import ProductCreationRequestSchema, {
 //   ProductStatusEnum,
-} from "@/types/dto/ProductCreationRequest";
+} from "@/types/dto/ProductUpdateRequest";
 
 
 export async function GET(request: NextRequest) {
