@@ -1,8 +1,8 @@
 export interface RequestUserType {
     id: string;
     email: string;
-    firstName: string;
-    lastName: string;
+    firstname: string;
+    lastname: string;
     role: string;
     privileges: string[];
 }
