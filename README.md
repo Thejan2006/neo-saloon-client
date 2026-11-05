@@ -17,9 +17,9 @@ Neo Saloon Client is a Next.js application built with the App Router, React, Typ
 | --- | --- |
 | 🖥️ Frontend | Next.js App Router with React 19 and TypeScript |
 | 🎨 Styling | Tailwind CSS 4 and optimized Geist fonts |
-| 🗄️ Data layer | Prisma 7 with a SQLite datasource |
-| 👤 User model | Unique email, optional name, and automatic timestamps |
-| 🔌 Database client | Prisma Client with the PostgreSQL adapter package available for future migrations |
+| 🗄️ Data layer | Prisma 7 with a PostgreSQL datasource |
+| 👤 User model | Unique email, first and last names, and optional phone |
+| 🔌 Database client | Prisma Client configured with the PostgreSQL adapter |
 
 ## 🚀 Quick start
 
@@ -33,13 +33,13 @@ npm install
 
 ### 2️⃣ Configure the database
 
-Create a `.env` file in the project root:
+Create a `.env` file in the project root and set it to your PostgreSQL connection:
 
 ```env
-DATABASE_URL="file:./dev.db"
+DATABASE_URL="postgresql://USER:PASSWORD@HOST:5432/DATABASE?schema=public"
 ```
 
-Then generate Prisma Client and apply the local schema:
+Then generate Prisma Client and apply the schema to that database:
 
 ```bash
 npx prisma generate
@@ -77,11 +77,12 @@ postman/             API collections, environments, and specs
 
 ## 👥 Current data model
 
-The initial `User` model includes the essentials for welcoming people into the Neo Saloon:
+The `User` model includes:
 
 - 📧 A unique email address
-- 🪪 An optional display name
-- 🕒 Automatically managed `createdAt` and `updatedAt` timestamps
+- 🪪 Required first and last names
+- 📱 An optional phone number
+- 🕒 Automatically managed `CreatedAt` and `UpdatedAt` timestamps
 
 ## 🛣️ Roadmap
 
