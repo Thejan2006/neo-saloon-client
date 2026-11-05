@@ -23,18 +23,26 @@ export async function GET(request : NextRequest){
         )
     }
 
-    const pageNumberInString = request.nextUrl.searchParams.get("pageNumber")||"1"
+    const pageNumber = Number(request.nextUrl.searchParams.get("pageNumber") ?? "1")
+    const pageSize = Number(request.nextUrl.searchParams.get("pageSize") ?? "10")
 
-    const pageSizeInString = request.nextUrl.searchParams.get("pageSize")||"10"
-
-    const pageNumber = parseInt(pageNumberInString)
-    const pageSize = parseInt(pageSizeInString) //50
+    if (
+        !Number.isInteger(pageNumber) ||
+        pageNumber < 1 ||
+        !Number.isInteger(pageSize) ||
+        pageSize < 1
+    ) {
+        return NextResponse.json(
+            { message: "pageNumber and pageSize must be positive integers" },
+            { status: 400 }
+        )
+    }
 
     const userCount = await prisma.user.count() //999 
     
     const totalPages = Math.ceil( userCount / pageSize )
 
-    if(pageNumber > totalPages){
+    if(userCount > 0 && pageNumber > totalPages){
         return NextResponse.json(
             {
                 message : "Page number exceeds total pages",
@@ -82,13 +90,9 @@ export async function GET(request : NextRequest){
 export async function POST(request : NextRequest){
 
     //email , firstName, lastName, password, phone(optional)
-
-    const body = await request.json()
-
-    //validate the body using zod
-
     try{
 
+        const body = await request.json()
         const parsedBody = UserRegistrationRequestSchema.parse(body)
 
         const existingUser = await prisma.user.findUnique(
@@ -110,15 +114,15 @@ export async function POST(request : NextRequest){
             )
         }
 
-        const passwordHash = await bcrypt.hash(body.password, 12)
+        const passwordHash = await bcrypt.hash(parsedBody.password, 12)
 
         await prisma.user.create({
             data :{
-                email : body.email,
-                firstname : body.firstName,
-                lastname : body.lastName,
+                email : parsedBody.email,
+                firstname : parsedBody.firstName,
+                lastname : parsedBody.lastName,
                 password : passwordHash,
-                phone : body.phone,
+                phone : parsedBody.phone,
             }
         })
 
@@ -166,6 +170,13 @@ export async function PUT(request : NextRequest){
 
     const id = request.nextUrl.searchParams.get("id")
 
+    if (!id) {
+        return NextResponse.json(
+            { message: "User id is required" },
+            { status: 400 }
+        )
+    }
+
     const requestedUser = await getUser(request)
 
     if(requestedUser == null){
@@ -187,7 +198,7 @@ export async function PUT(request : NextRequest){
             
             //never allow users to update their own role, status, privileges
 
-            UserSelfUpdateRequestSchema.parse(body)
+            const parsedBody = UserSelfUpdateRequestSchema.parse(body)
             const user = await prisma.user.findUnique({
                 where : {
                     id : id
@@ -211,11 +222,11 @@ export async function PUT(request : NextRequest){
                     id : id
                 },
                 data : {
-                    email : body.email || user.email,
-                    firstname : body.firstName || user.firstname,
-                    lastname : body.lastName || user.lastname,
-                    phone : body.phone || user.phone,
-                    profileImage : body.profileImage || user.profileImage // should be included in the token
+                    email : parsedBody.email ?? user.email,
+                    firstname : parsedBody.firstName ?? user.firstname,
+                    lastname : parsedBody.lastName ?? user.lastname,
+                    phone : parsedBody.phone ?? user.phone,
+                    profileImage : parsedBody.profileImage ?? user.profileImage
                 }
 
             })
@@ -241,11 +252,11 @@ export async function PUT(request : NextRequest){
                 )
             }
 
-            UserUpdateByAdminRequestSchema.parse(body)
+            const parsedBody = UserUpdateByAdminRequestSchema.parse(body)
 
             const user = await prisma.user.findUnique({
                 where : {
-                    id : id||"000"
+                    id
                 }
             })
 
@@ -264,17 +275,17 @@ export async function PUT(request : NextRequest){
             
             await prisma.user.update({
                 where : {
-                    id : id||"000"
+                    id
                 },
                 data : {
-                    email : body.email || user.email,
-                    firstname : body.firstName || user.firstname,
-                    lastname : body.lastName || user.lastname,
-                    phone : body.phone || user.phone,
-                    profileImage : body.profileImage || user.profileImage,
-                    role : body.role || user.role,
-                    status : body.status || user.status,
-                    privileges : body.privileges || user.privileges
+                    email : parsedBody.email ?? user.email,
+                    firstname : parsedBody.firstName ?? user.firstname,
+                    lastname : parsedBody.lastName ?? user.lastname,
+                    phone : parsedBody.phone ?? user.phone,
+                    profileImage : parsedBody.profileImage ?? user.profileImage,
+                    role : parsedBody.role ?? user.role,
+                    status : parsedBody.status ?? user.status,
+                    privileges : parsedBody.privileges
                 }
             })
 
