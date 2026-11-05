@@ -3,9 +3,7 @@ import * as jose from "jose";
 import { z } from "zod";
 import prisma from "@/lib/prisma";
 import { isPrivileged } from "@/utils/authentication";
-import ProductCreationRequestSchema, {
-//   ProductStatusEnum,
-} from "@/types/dto/ProductUpdateRequest";
+import ProductCreationRequestSchema from "@/types/dto/ProductCreationRequest";
 
 
 export async function GET(request: NextRequest) {
@@ -49,14 +47,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const product = await (prisma as any).product.create({
+    const product = await prisma.product.create({
       data: {
         sku: parsedBody.data.sku,
         name: parsedBody.data.name,
-        altNames: parsedBody.data.altName,
+        altNames: parsedBody.data.altNames,
         description: parsedBody.data.description,
         stock: parsedBody.data.stock,
-        status: parsedBody.data.status, //as ProductStatusEnum
+        status: parsedBody.data.status,
         price: parsedBody.data.price,
         compareAt: parsedBody.data.compareAt,
         brand: parsedBody.data.brand,
@@ -86,5 +84,4 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-
 
