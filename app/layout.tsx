@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Sign in | Neo Saloon",
-  description: "Sign in or create your Neo Saloon client account.",
+  title: "Neo Saloon | Client portal",
+  description: "Your personal Neo Saloon client space.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
