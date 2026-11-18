@@ -1,0 +1,149 @@
+{
+  "info": {
+    "_postman_id": "41148086-9681-45b5-b3fb-5fb986ef4410",
+    "name": "Neo Saloon Client Dashboard",
+    "description": "Client dashboard and admin welcome-message API. Sign in first to store the HTTP-only login cookie in Postman's cookie jar.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "clientId",
+      "value": "replace-with-customer-user-uuid"
+    },
+    {
+      "key": "welcomeMessage",
+      "value": "Welcome to Neo Saloon! We are glad you are here. Explore the services available and contact our team when you are ready to plan your visit."
+    }
+  ],
+  "item": [
+    {
+      "name": "Sign in",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"admin@saloonneon.lk\",\n  \"password\": \"replace-with-admin-password\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "auth"
+          ]
+        },
+        "description": "Use an existing admin account to call admin endpoints. Postman stores the login_token cookie automatically."
+      }
+    },
+    {
+      "name": "List clients",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/admin/clients?pageNumber=1&pageSize=25",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "admin",
+            "clients"
+          ],
+          "query": [
+            {
+              "key": "pageNumber",
+              "value": "1"
+            },
+            {
+              "key": "pageSize",
+              "value": "25"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Send welcome message",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"clientId\": \"{{clientId}}\",\n  \"content\": \"{{welcomeMessage}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/admin/messages",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "admin",
+            "messages"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get my dashboard",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/dashboard",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "dashboard"
+          ]
+        },
+        "description": "Sign in with a customer account to verify that the dashboard returns only that customer's welcome message."
+      }
+    },
+    {
+      "name": "Sign out",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/logout",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "auth",
+            "logout"
+          ]
+        }
+      }
+    }
+  ]
+}
