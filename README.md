@@ -46,6 +46,8 @@ npx prisma generate
 npx prisma db push
 ```
 
+Set `JOSE_SECRET_KEY` to a long, random secret in the server environment. Client and admin sign-in uses a one-hour, HTTP-only JWT cookie. After applying the Prisma schema, start the app as usual.
+
 ### 3️⃣ Start the development server
 
 ```bash
@@ -64,6 +66,34 @@ Open [http://localhost:3000](http://localhost:3000) in your browser and step ins
 | `npx prisma generate` | Generate the Prisma Client 🔧 |
 | `npx prisma db push` | Sync the Prisma schema to the database 🔄 |
 | `npx prisma studio` | Browse and edit local database records 🔍 |
+
+## 🔐 Client dashboard and welcome messages
+
+- Clients sign in at `/` and are sent to `/dashboard`. Their dashboard reads only their own profile and welcome message.
+- Admins sign in at `/` and are sent to `/admin`. The protected client-list and welcome-message APIs are also available for same-origin admin integrations and Postman.
+- Only active customer accounts created within the previous seven days are eligible for a welcome message. A client can receive one welcome message only.
+- Apply the new `WelcomeMessage` schema with `npx prisma db push` or deploy migrations with `npx prisma migrate deploy`.
+
+### API routes
+
+| Method | Route | Access | Purpose |
+| --- | --- | --- | --- |
+| `POST` | `/api/auth` | Public | Sign in; sets the HTTP-only JWT cookie |
+| `POST` | `/api/auth/logout` | Public | Clears the login cookie |
+| `GET` | `/api/dashboard` | Active customer | Gets the signed-in customer’s dashboard and own welcome message |
+| `GET` | `/api/admin/clients?pageNumber=1&pageSize=25` | Admin or `users:read` | Lists customer accounts and welcome eligibility |
+| `POST` | `/api/admin/messages` | Admin or `client-messages:send` | Sends one welcome message to an eligible client |
+
+Send a welcome message with JSON:
+
+```json
+{
+  "clientId": "customer-user-uuid",
+  "content": "Welcome to Neo Saloon! Here’s a brief introduction..."
+}
+```
+
+The Postman collection is in `postman/collections/neo-saloon-client.json`. Set its `baseUrl`, then sign in to establish the cookie before calling protected routes.
 
 ## 🗺️ Project structure
 
