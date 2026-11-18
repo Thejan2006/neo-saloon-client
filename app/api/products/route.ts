@@ -1,29 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-import * as jose from "jose";
 import { z } from "zod";
 import prisma from "@/lib/prisma";
-import { isPrivileged } from "@/utils/authentication";
+import { getUser, isPrivileged } from "@/utils/authentication";
 import ProductCreationRequestSchema from "@/types/dto/ProductCreationRequest";
 
 
 export async function GET(request: NextRequest) {
-  const loginToken = request.cookies.get("login_token")?.value;
-  const secretText = process.env.JOSE_SECRET_KEY;
-
-  if (!loginToken || !secretText) {
-    return new Response("Unauthorized", { status: 401 });
+  const user = await getUser(request);
+  if (!user) {
+    return NextResponse.json({ message: "Authentication required" }, { status: 401 });
   }
-
-  const secret = new TextEncoder().encode(secretText);
-
-  try {
-    const user = await jose.jwtVerify(loginToken, secret);
-    console.log(user);
-
-    return NextResponse.json({ user: user.payload });
-  } catch (error) {
-    return new Response("Unauthorized", { status: 401 });
-  }
+  return NextResponse.json({ user });
 }
 
 export async function POST(request: NextRequest) {
