@@ -1,15 +1,18 @@
 "use client";
 
 import { useEffect, useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
 
 type AuthView = "login" | "register";
 
 type ApiResponse = {
   message?: string;
   error?: string;
+  role?: string;
 };
 
 export default function Home() {
+  const router = useRouter();
   const [view, setView] = useState<AuthView>("login");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loginFeedback, setLoginFeedback] = useState("");
@@ -53,11 +56,7 @@ export default function Home() {
       const result = (await response.json()) as ApiResponse;
 
       if (response.ok) {
-        setLoginFeedback("You’re signed in successfully.");
-      } else if (response.status === 404) {
-        setLoginFeedback("We couldn’t find an account with that email. Please create one first.");
-      } else if (response.status === 401) {
-        setLoginFeedback("That email and password don’t match. Please try again.");
+        router.replace(result.role === "ADMIN" ? "/admin" : "/dashboard");
       } else {
         setLoginFeedback(result.error ?? result.message ?? "We couldn’t sign you in. Please try again.");
       }
@@ -193,7 +192,7 @@ export default function Home() {
 
               {loginFeedback ? (
                 <p
-                  className={`feedback ${loginFeedback.startsWith("You’re") || loginFeedback.startsWith("Your account") ? "feedback-success" : ""}`}
+                  className={`feedback ${loginFeedback.startsWith("Your account") ? "feedback-success" : ""}`}
                   role="status"
                 >
                   {loginFeedback}
@@ -257,8 +256,8 @@ export default function Home() {
                   type="password"
                   name="password"
                   autoComplete="new-password"
-                  placeholder="At least 6 characters"
-                  minLength={6}
+                  placeholder="At least 8 characters"
+                  minLength={8}
                   required
                 />
               </label>
